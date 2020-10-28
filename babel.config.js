@@ -12,6 +12,7 @@ module.exports = function(api) {
             constants: './constants',
             helpers: './helpers',
             models: './models',
+            queries: './queries',
           },
         },
       ],
