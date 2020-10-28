@@ -1,47 +1,73 @@
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { Text, View as ThemedView } from 'components/Themed';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
-import ToCountryEmoji from 'helpers/CountryEmojiConverter';
+import Job from 'models/Job';
+import toCountryEmoji from 'helpers/CountryEmojiConverter';
+import City from 'models/City';
+import Remote from 'models/Remote';
+
+const JOB_INFO_MAX_WIDTH = 600;
+const IMAGE_SIZE = 80;
 
 const styles = StyleSheet.create({
   jobView: {
     width: '100%',
-    height: 120,
+    minHeight: 120,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#fff'
   },
   featured: {
-    height: 160,
-    paddingVertical: 15,
+    minHeight: 160,
     backgroundColor: '#f0f5ff'
   },
   jobInfo: {
-    width: 600,
+    width: '100%',
+    maxWidth: JOB_INFO_MAX_WIDTH,
     margin: 'auto',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+  },
+  jobTextContainer: {
+    flex: 1,
+    flexDirection: 'column'
+  },
+  locationTextContainer: {
+    flex: 1,
+    flexDirection: 'row'
   },
   image: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     resizeMode: 'contain',
-    maxWidth: 60,
-    maxHeight: 60,
-    height: '100%',
-    marginHorizontal: 30
+    minWidth: IMAGE_SIZE,
+    maxWidth: IMAGE_SIZE,
+    minHeight: IMAGE_SIZE,
+    maxHeight: IMAGE_SIZE,
+    marginRight: 10,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 10
+  },
+  logoText: {
+    fontSize: 40,
+    color: '#555'
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    flexShrink: 1
   },
   normalText: {
     fontSize: 15,
-    marginTop: 10
+    marginTop: 10,
+    flexShrink: 1
   },
   featuredChip: {
-    width: 600,
+    maxWidth: JOB_INFO_MAX_WIDTH,
+    width: '100%',
     marginHorizontal: 'auto',
   },
   featuredText: {
@@ -57,40 +83,93 @@ const styles = StyleSheet.create({
   }
 });
 
-function JobView({ title, company, country, countryIsoCode, featured }) {
-  const countryEmoji = ToCountryEmoji(countryIsoCode);
-  const featuredTag = featured ? (
-                        <View style={styles.featuredChip}>
-                          <Text style={styles.featuredText}>Featured</Text>
-                        </View>
-                      ) : null;
+export type JobViewProps = {
+  job: Job
+};
+
+function JobView(props: JobViewProps) {
+  const {
+    title,
+    company: {
+      name: companyName,
+      logoUrl
+    },
+    cities,
+    remotes,
+    isFeatured
+  } = props.job;
 
   return (
-    <ThemedView style={[styles.jobView, featured ? styles.featured : null]}>
-      {featuredTag}
+    <View style={[styles.jobView, isFeatured ? styles.featured : null]}>
+      {getFeatureTag(isFeatured)}
       <View style={styles.jobInfo}>
-        <Image style={styles.image} source={{ uri: 'https://logo.clearbit.com/segment.com?size=200' }}></Image>
-        <View>
+        {getCompanyImage(companyName, logoUrl)}
+        <View style={styles.jobTextContainer}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.normalText}>{company}</Text>
-          <Text style={styles.normalText}>{countryEmoji} {country}</Text>
+          <Text style={styles.normalText}>{companyName}</Text>
+          {getLocationText(cities, remotes)}
         </View>
       </View>
-    </ThemedView>
+    </View>
   );
 };
 
 JobView.propTypes = {
-  title: PropTypes.string.isRequired,
-  company: PropTypes.string.isRequired,
-  country: PropTypes.string.isRequired,
-  countryIsoCode: PropTypes.string,
-  featured: PropTypes.bool,
+  job: PropTypes.object.isRequired
 };
 
-JobView.defaultProps = {
-  featured: false,
-  countryIsoCode: ''
-};
+function getFeatureTag(isFeatured: boolean) {
+  if (!isFeatured) {
+    return null;
+  }
+  return (
+    <View style={styles.featuredChip}>
+      <Text style={styles.featuredText}>Featured</Text>
+    </View>
+  );
+}
+
+function getLocationText(cities: City[], remotes: Remote[]) {
+  // gather city and remote string
+  const citiesString = cities.map((city) => city.name).join(', ');
+  const remotesString = remotes.map((remote) => remote.name).join(', ');
+  
+  // get country emoji
+  const countryEmoji = cities.length > 0 ? toCountryEmoji(cities[0].country.isoCode) : '';
+
+  // Text element
+  let citiesText = null, spacingText = null, remotesText = null;
+
+  if (citiesString) {
+    citiesText = <Text style={styles.normalText}>{countryEmoji} {citiesString}</Text>;
+  }
+
+  if (remotesString) {
+    remotesText = <Text style={[styles.normalText, {fontStyle: 'italic'}]}>{remotesString}</Text>;
+  }
+
+  // spacingText provides the comma between cities text and remotes text
+  if (citiesString && remotesString) {
+    spacingText = <Text style={styles.normalText}>, </Text>;
+  }
+
+  return (
+    <View style={styles.locationTextContainer}>
+      {citiesText}{spacingText}{remotesText}
+    </View>
+  );
+}
+
+function getCompanyImage(companyName: string, logoUrl?: string) {
+  if (logoUrl != null && logoUrl.length > 0) {
+    return (<Image style={styles.image} source={{ uri: logoUrl }}></Image>);
+  } else {
+    return (
+      <View style={styles.image}>
+        <Text style={styles.logoText}>{companyName.charAt(0)}</Text>
+      </View>
+    );
+  }
+}
 
 export default JobView;
