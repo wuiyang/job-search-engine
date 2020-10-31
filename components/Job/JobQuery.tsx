@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -18,12 +18,11 @@ const styles = StyleSheet.create({
 
 type JobQueryProps = {
   variables?: Object,
-  loadingText?: string,
-  errorText?: string,
+  navigateToJobPage: (job: Job) => void 
 };
 
 function JobQuery(props: JobQueryProps) {
-  const { loadingText, errorText, variables = {} } = props;
+  const { variables = {}, navigateToJobPage } = props;
   const isListing = Object.keys(variables).length === 0;
   const query = isListing ? JOB_LIST : JOB_QUERY;
   const jobRetriever = isListing ? getJobListJobs : getJobQueryJobs;
@@ -33,7 +32,7 @@ function JobQuery(props: JobQueryProps) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" />
-        <Text>{loadingText}</Text>
+        <Text>GraphQL &#123; jobs &#125;...</Text>
       </View>
     );
   }
@@ -42,7 +41,7 @@ function JobQuery(props: JobQueryProps) {
     return (
       <View style={styles.centerContainer}>
         <MaterialIcons name="error" size={50} color="black" />
-        <Text>{errorText}</Text>
+        <Text>Error! Unable to GraphQL Jobs!</Text>
       </View>
     );
   }
@@ -52,7 +51,7 @@ function JobQuery(props: JobQueryProps) {
       data={jobRetriever(data)}
       renderItem={
         ({ item }) => (
-          <JobView job={item} />
+          <JobView job={item} onPress={() => navigateToJobPage(item)} showTags={true} />
         )
       }
       keyExtractor={ (item) => item.id }
@@ -61,15 +60,11 @@ function JobQuery(props: JobQueryProps) {
 };
 
 JobQuery.propTypes = {
-  variables: PropTypes.object,
-  loadingText: PropTypes.string,
-  errorText: PropTypes.string,
+  variables: PropTypes.object
 };
 
 JobQuery.defaultProps = {
-  variables: {},
-  loadingText: 'Running GraphQL Query...',
-  errorText: 'Error! Unable to GraphQL Jobs!',
+  variables: {}
 };
 
 export default JobQuery;
