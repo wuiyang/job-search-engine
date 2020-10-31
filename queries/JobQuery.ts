@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import Job from 'models/Job';
 
-const JOB_DETAIL = `
+const JOB_TYPE = `
     id
     slug
     title
@@ -14,6 +14,8 @@ const JOB_DETAIL = `
       id
       slug
       name
+      # country information are gathered through cities
+      # as job.countries are mostly empty
       country {
         id
         slug
@@ -48,10 +50,26 @@ const JOB_DETAIL = `
     updatedAt
 `
 
+export const JOB_DETAIL = gql`
+query JobDetail (
+  $companySlug: String!
+  $jobSlug: String!
+) {
+  job (
+    input: {
+      companySlug: $companySlug
+      jobSlug: $jobSlug
+    }
+  ) {
+    ${JOB_TYPE}
+  }
+}
+`
+
 export const JOB_LIST = gql`
 query JobList {
   jobs {
-    ${JOB_DETAIL}
+    ${JOB_TYPE}
   }
 }
 `
@@ -73,11 +91,16 @@ query JobQuery (
       skip: $skip
       first: $first
     ) {
-      ${JOB_DETAIL}
+      ${JOB_TYPE}
     }
   }
 }
 `
+
+export function getJob(data: any): Job {
+  return data.job
+}
+
 export function getJobListJobs(data: any): Job[] {
   return data.jobs
 }
