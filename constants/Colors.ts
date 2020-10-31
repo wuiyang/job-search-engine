@@ -9,6 +9,10 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
   },
+  featured: {
+    text: '#0055ff',
+    background: '#f0f5ff',
+  },
   dark: {
     text: '#fff',
     background: '#000',
