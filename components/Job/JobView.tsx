@@ -6,9 +6,12 @@ import Job from 'models/Job';
 import toCountryEmoji from 'helpers/CountryEmojiConverter';
 import City from 'models/City';
 import Remote from 'models/Remote';
+import SimpleChip from 'components/SimpleChip';
 
-const JOB_INFO_MAX_WIDTH = 600;
+const JOB_INFO_MAX_WIDTH = 1000;
 const IMAGE_SIZE = 80;
+const FEATURED_COLOR = '#0055ff';
+const FEATURED_BACKGROUND_COLOR = '#f0f5ff';
 
 const styles = StyleSheet.create({
   jobView: {
@@ -20,19 +23,27 @@ const styles = StyleSheet.create({
   },
   featured: {
     minHeight: 160,
-    backgroundColor: '#f0f5ff'
+    backgroundColor: FEATURED_BACKGROUND_COLOR
   },
-  jobInfo: {
+  jobContentWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
     width: '100%',
     maxWidth: JOB_INFO_MAX_WIDTH,
     margin: 'auto',
+  },
+  jobInfo: {
     flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
   },
   jobTextContainer: {
-    flex: 1,
-    flexDirection: 'column'
+    flex: 2,
+    flexDirection: 'column',
+    minWidth: 200,
   },
   locationTextContainer: {
     flex: 1,
@@ -70,16 +81,23 @@ const styles = StyleSheet.create({
     width: '100%',
     marginHorizontal: 'auto',
   },
-  featuredText: {
+  featuredChipText: {
     width: 80,
-    borderWidth: 2,
-    borderColor: '#05f',
-    borderRadius: 5,
-    color: '#05f',
-    marginBottom: -12,
-    padding: 4,
-    fontSize: 15,
-    textAlign: 'center'
+  },
+  featuredText: {
+    borderColor: FEATURED_COLOR,
+    color: FEATURED_COLOR,
+  },
+  tagChipContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    minWidth: 150,
+    marginVertical: 5,
+  },
+  tagChip: {
+    marginRight: 10,
+    marginVertical: 5
   }
 });
 
@@ -96,18 +114,34 @@ function JobView(props: JobViewProps) {
     },
     cities,
     remotes,
-    isFeatured
+    isFeatured,
+    tags
   } = props.job;
 
   return (
     <View style={[styles.jobView, isFeatured ? styles.featured : null]}>
       {getFeatureTag(isFeatured)}
-      <View style={styles.jobInfo}>
+      <View style={styles.jobContentWrapper}>
         {getCompanyImage(companyName, logoUrl)}
-        <View style={styles.jobTextContainer}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.normalText}>{companyName}</Text>
-          {getLocationText(cities, remotes)}
+        <View style={styles.jobInfo}>
+          <View style={styles.jobTextContainer}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.normalText}>{companyName}</Text>
+            {getLocationText(cities, remotes)}
+          </View>
+          <View style={styles.tagChipContainer}>
+            {
+              tags.slice(0, 3).map(tag => (
+                <SimpleChip
+                  chipStyle={styles.tagChip}
+                  textStyle={isFeatured ? styles.featuredText : null}
+                  key={tag.id}
+                >
+                  {tag.name}
+                </SimpleChip>
+              ))
+            }
+          </View>
         </View>
       </View>
     </View>
@@ -123,9 +157,12 @@ function getFeatureTag(isFeatured: boolean) {
     return null;
   }
   return (
-    <View style={styles.featuredChip}>
-      <Text style={styles.featuredText}>Featured</Text>
-    </View>
+    <SimpleChip
+      chipStyle={styles.featuredChip}
+      textStyle={[styles.featuredChipText, styles.featuredText]}
+    >
+      Featured
+    </SimpleChip>
   );
 }
 
@@ -162,8 +199,10 @@ function getLocationText(cities: City[], remotes: Remote[]) {
 
 function getCompanyImage(companyName: string, logoUrl?: string) {
   if (logoUrl != null && logoUrl.length > 0) {
+    // for companies with logo, use Image
     return (<Image style={styles.image} source={{ uri: logoUrl }}></Image>);
   } else {
+    // for companies without logo, use text
     return (
       <View style={styles.image}>
         <Text style={styles.logoText}>{companyName.charAt(0)}</Text>
