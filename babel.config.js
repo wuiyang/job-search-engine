@@ -13,6 +13,7 @@ module.exports = function(api) {
             helpers: './helpers',
             models: './models',
             queries: './queries',
+            screens: './screens',
           },
         },
       ],
