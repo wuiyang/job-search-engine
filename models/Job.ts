@@ -1,52 +1,88 @@
-import BaseModel from './BaseModel';
-import City from './City';
-import Commitment from './Commitment';
-import Company from './Company';
-import Country from './Country';
-import Remote from './Remote';
-import Tag from './Tag';
+import { Instance, types } from 'mobx-state-tree';
+import toCountryEmoji from 'helpers/CountryEmojiConverter';
+
+// job tag
+export const Tag = types.model("Tag", {
+  id: types.identifier,
+  slug: types.string,
+  name: types.string
+});
+
+// determine remote type (currently only 1)
+export const Remote = types.model("Remote", {
+  id: types.identifier,
+  slug: types.string,
+  name: types.string
+});
 
 // whether job is part time or full time
-export default class Job extends BaseModel {
+export const Commitment = types.model("Commitment", {
+  id: types.identifier,
+  slug: types.string,
+  title: types.string
+});
+
+// company info
+export const Company = types.model("Company", {
+  id: types.identifier,
+  slug: types.string,
+  name: types.string,
+  websiteUrl: types.string,
+  logoUrl: types.union(types.optional(types.string, ""), types.null),
+  twitter: types.union(types.optional(types.string, ""), types.null)
+});
+
+// country information
+export const Country = types.model("Country", {
+  id: types.identifier,
+  slug: types.string,
+  name: types.string,
+  isoCode: types.string
+}).views((self) => {
+  return {
+    get countryEmoji(): string {
+      return toCountryEmoji(self.isoCode);
+    }
+  }
+});
+
+// city information, one country has one or many cities
+export const City = types.model("City", {
+  id: types.identifier,
+  slug: types.string,
+  name: types.string,
+  country: Country,
+});
+
+// whether job is part time or full time
+export const Job = types.model("Job", {
   // basic information required for job list view
-  title: string;
-  company: Company;
-  cities: City[];
-  remotes: Remote[];
-  isPublished: boolean;
-  isFeatured: boolean;
+  id: types.identifier,
+  slug: types.string,
+  title: types.string,
+  company: Company,
+  cities: types.optional(types.array(City), []),
+  remotes: types.optional(types.array(Remote), []),
+  isPublished: types.boolean,
+  isFeatured: types.optional(types.maybeNull(types.boolean), false),
 
   // queryable info
-  commitment: Commitment;
-  tags: Tag[];
+  commitment: Commitment,
+  tags: types.optional(types.array(Tag), []),
 
   // detailed info
-  description: string;
-  applyUrl: string;
+  description: types.string,
+  applyUrl: types.string,
 
-  postedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  
-  constructor(title: string, company: Company, cities: City[], 
-              remotes: Remote[], description: string, commitment: Commitment,
-              applyUrl: string, tags: Tag[], isPublished: boolean, 
-              isFeatured: boolean, postedAt: Date, createdAt: Date, 
-              updatedAt: Date, id: string, slug: string) {
-    super(id, slug);
-    this.title = title;
-    this.commitment = commitment;
-    this.cities = cities;
-    this.remotes = remotes;
-    this.description = description;
-    this.applyUrl = applyUrl;
-    this.company = company;
-    this.tags = tags;
-    this.isPublished = isPublished;
-    this.isFeatured = isFeatured;
+  postedAt: types.Date,
+  createdAt: types.Date,
+  updatedAt: types.Date
+});
 
-    this.postedAt = postedAt;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+export const JobStore = types.model("JobStore", {
+  jobs: types.optional(types.array(Job), [])
+}).actions((self) => ({
+  push(job: Instance<typeof Job>) {
+    return self.jobs.push(job);
   }
-}
+}));
