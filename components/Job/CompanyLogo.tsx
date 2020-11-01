@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     minHeight: IMAGE_SIZE,
     maxHeight: IMAGE_SIZE,
     marginRight: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#d5d5d5',
     borderRadius: 10
   },
   logoText: {
@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type CompanyLogoProps = {
+export type CompanyLogoProps = {
   companyName: string,
   logoUrl?: string | null
 }
 
-function CompanyLogo(props: CompanyLogoProps) {
+export default function CompanyLogo(props: CompanyLogoProps) {
   const { companyName, logoUrl } = props;
   if (logoUrl != null && logoUrl.length > 0) {
     // for companies with logo, use Image
@@ -48,9 +48,3 @@ CompanyLogo.propTypes = {
   companyName: PropTypes.string.isRequired,
   logoUrl: PropTypes.string
 };
-
-CompanyLogo.defaultProps = {
-  logoUrl: ''
-}
-
-export default CompanyLogo;

@@ -1,9 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, StyleProp , TextStyle } from 'react-native';
 import PropTypes from 'prop-types';
-import City from 'models/City';
-import Remote from 'models/Remote';
-import toCountryEmoji from 'helpers/CountryEmojiConverter';
+import { City, Remote } from 'models/Job';
+import { Instance } from 'mobx-state-tree';
 
 const styles = StyleSheet.create({
   locationTextContainer: {
@@ -16,20 +15,20 @@ const styles = StyleSheet.create({
   },
 });
 
-type LocationTextProps = {
-  cities: City[],
-  remotes: Remote[],
-  textStyle?: any
+export type LocationTextProps = {
+  cities: Instance<typeof City>[],
+  remotes: Instance<typeof Remote>[],
+  textStyle?: StyleProp<TextStyle> | StyleProp<TextStyle>[]
 };
 
-function LocationText(props: LocationTextProps) {
+export default function LocationText(props: LocationTextProps) {
   const { cities, remotes, textStyle } = props;
   // gather city and remote string
   const citiesString = cities.map((city) => city.name).join(', ');
   const remotesString = remotes.map((remote) => remote.name).join(', ');
   
   // get country emoji
-  const countryEmoji = cities.length > 0 ? toCountryEmoji(cities[0].country.isoCode) : '';
+  const countryEmoji = cities.length > 0 ? cities[0].country.countryEmoji : '';
 
   const usedTextStyle = textStyle ?? styles.normalText;
 
@@ -57,13 +56,6 @@ function LocationText(props: LocationTextProps) {
 }
 
 LocationText.propTypes = {
-  cities: PropTypes.instanceOf(City).isRequired,
-  remotes: PropTypes.instanceOf(Remote).isRequired,
-  textStyle: PropTypes.object
+  cities: PropTypes.array.isRequired,
+  remotes: PropTypes.array.isRequired,
 };
-
-LocationText.defaultProps = {
-  textStyle: null
-}
-
-export default LocationText;

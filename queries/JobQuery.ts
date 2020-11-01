@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
-import Job from 'models/Job';
+import { Instance } from 'mobx-state-tree';
+import { City, Commitment, Company, Country, Job, JobStore, Remote, Tag } from 'models/Job';
 
 const JOB_TYPE = `
     id
@@ -97,15 +98,33 @@ query JobQuery (
 }
 `
 
-export function getJob(data: any): Job {
-  return data.job
+function toJobInstance(jobData: any): Instance<typeof Job> {
+  const { postedAt, createdAt, updatedAt, ...otherProperty } = jobData;
+  return Job.create({
+    ...otherProperty,
+    postedAt: new Date(postedAt),
+    createdAt: new Date(createdAt),
+    updatedAt: new Date(updatedAt),
+  });
+}
+function toJobStore(jobsData: any[]): Instance<typeof JobStore> {
+  const jobs = JobStore.create();
+  jobsData.forEach(job => {
+    jobs.push(toJobInstance(job));
+  });
+  console.log(jobs);
+  return jobs;
 }
 
-export function getJobListJobs(data: any): Job[] {
-  return data.jobs
+export function getJob(data: any): Instance<typeof Job> {
+  return toJobInstance(data.job);
 }
 
-export function getJobQueryJobs(data: any): Job[] {
-  return data.commitments[0].jobs
+export function getJobListJobs(data: any): Instance<typeof JobStore> {
+  return toJobStore(data.jobs);
+}
+
+export function getJobQueryJobs(data: any): Instance<typeof JobStore> {
+  return toJobStore(data.commitments.jobs);
 }
 

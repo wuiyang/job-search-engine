@@ -5,8 +5,10 @@ import { useQuery } from 'react-apollo';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FlatList } from 'react-native-gesture-handler';
 import { JOB_LIST, JOB_QUERY, getJobListJobs, getJobQueryJobs } from 'queries/JobQuery';
-import Job from 'models/Job';
+import { Job } from 'models/Job';
 import JobView from './JobView';
+import { Instance } from 'mobx-state-tree';
+import AppFooter from 'components/AppFooter';
 
 const styles = StyleSheet.create({
   centerContainer: {
@@ -16,12 +18,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type JobQueryProps = {
+export type JobQueryProps = {
   variables?: Object,
-  navigateToJobPage: (job: Job) => void 
+  navigateToJobPage: (job: Instance<typeof Job>) => void 
 };
 
-function JobQuery(props: JobQueryProps) {
+export default function JobQuery(props: JobQueryProps) {
   const { variables = {}, navigateToJobPage } = props;
   const isListing = Object.keys(variables).length === 0;
   const query = isListing ? JOB_LIST : JOB_QUERY;
@@ -47,14 +49,16 @@ function JobQuery(props: JobQueryProps) {
   }
 
   return (
-    <FlatList<Job>
-      data={jobRetriever(data)}
+    <FlatList<Instance<typeof Job>>
+      data={jobRetriever(data).jobs}
       renderItem={
         ({ item }) => (
           <JobView job={item} onPress={() => navigateToJobPage(item)} showTags={true} />
         )
       }
       keyExtractor={ (item) => item.id }
+      contentContainerStyle={{flexGrow: 1}}
+      ListFooterComponent={AppFooter}
     />
   );
 };
@@ -62,9 +66,3 @@ function JobQuery(props: JobQueryProps) {
 JobQuery.propTypes = {
   variables: PropTypes.object
 };
-
-JobQuery.defaultProps = {
-  variables: {}
-};
-
-export default JobQuery;

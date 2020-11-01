@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Pressable, GestureResponderEvent } from 'react-native';
+import { StyleSheet, Text, View, Pressable, GestureResponderEvent, ViewStyle, StyleProp } from 'react-native';
+import { Instance } from 'mobx-state-tree';
 import PropTypes from 'prop-types';
 
 import moment from 'moment';
 
-import Job from 'models/Job';
+import { Job } from 'models/Job';
 import SimpleChip from 'components/SimpleChip';
 import CompanyLogo from 'components/Job/CompanyLogo';
 import LocationText from 'components/Job/LocationText';
@@ -38,7 +39,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'center',
   },
   jobTextContainer: {
     flex: 2,
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
   timeAgoText: {
     color: '#666',
     fontSize: 12,
-    marginTop: 5
   },
   featuredChip: {
     maxWidth: JOB_INFO_MAX_WIDTH,
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
   },
   featuredChipText: {
-    width: 80,
+    alignSelf: 'flex-start'
   },
   featuredText: {
     borderColor: Colors.featured.text,
@@ -73,13 +72,14 @@ const styles = StyleSheet.create({
 });
 
 export type JobViewProps = {
-  job: Job,
+  job: Instance<typeof Job>,
   onPress?: null | ((event: GestureResponderEvent) => void),
   showTags?: boolean,
-  innerStyle?: any,
+  style?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[],
+  innerStyle?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[],
 };
 
-function JobView(props: JobViewProps) {
+export default function JobView(props: JobViewProps) {
   const {
     job: {
       title,
@@ -89,18 +89,20 @@ function JobView(props: JobViewProps) {
       },
       cities,
       remotes,
-      isFeatured,
       tags,
       postedAt
     },
     onPress,
     showTags = false,
+    style,
     innerStyle
   } = props;
 
+  const isFeatured = !!props.job.isFeatured;
+
   return (
-    <Pressable style={[styles.jobView, isFeatured ? styles.featured : null]} onPress={onPress}>
-      {getFeatureTag(isFeatured)}
+    <Pressable style={[styles.jobView, style, isFeatured ? styles.featured : null]} onPress={onPress}>
+      {getFeatureTag(isFeatured, innerStyle)}
       <View style={[styles.jobContentWrapper, innerStyle]}>
         <CompanyLogo companyName={companyName} logoUrl={logoUrl} />
         <View style={styles.jobInfo}>
@@ -118,30 +120,20 @@ function JobView(props: JobViewProps) {
 };
 
 JobView.propTypes = {
-  job: PropTypes.instanceOf(Job).isRequired,
   onPress: PropTypes.func,
   showTags: PropTypes.bool,
-  style: PropTypes.object
 };
 
-JobView.defaultProps = {
-  onPress: null,
-  showTags: false,
-  style: null
-}
-
-function getFeatureTag(isFeatured: boolean) {
+function getFeatureTag(isFeatured: boolean, innerStyle?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[]) {
   if (!isFeatured) {
     return null;
   }
   return (
     <SimpleChip
-      chipStyle={styles.featuredChip}
+      chipStyle={[styles.featuredChip, innerStyle]}
       textStyle={[styles.featuredChipText, styles.featuredText]}
     >
       Featured
     </SimpleChip>
   );
 }
-
-export default JobView;

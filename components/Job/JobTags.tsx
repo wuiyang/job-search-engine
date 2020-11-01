@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import SimpleChip from 'components/SimpleChip';
-import Tag from 'models/Tag';
+import { Tag } from 'models/Job';
 import Colors from 'constants/Colors';
+import { Instance } from 'mobx-state-tree';
 
 const styles = StyleSheet.create({
   tagChipContainer: {
@@ -23,14 +24,14 @@ const styles = StyleSheet.create({
   },
 });
 
-type JobTagsProps = {
-  tags: Tag[],
+export type JobTagsProps = {
+  tags: Instance<typeof Tag>[],
   isFeatured?: boolean,
   limitAmount?: number
 }
 
-function JobTags(props: JobTagsProps) {
-  const { tags, isFeatured, limitAmount = 0 } = props;
+export default function JobTags(props: JobTagsProps) {
+  const { tags, isFeatured = false, limitAmount = 0 } = props;
   let displayTags = tags;
   if (limitAmount > 0) {
     displayTags = displayTags.slice(0, limitAmount);
@@ -53,4 +54,8 @@ function JobTags(props: JobTagsProps) {
   )
 }
 
-export default JobTags;
+JobTags.propTypes = {
+  tags: PropTypes.array.isRequired,
+  isFeatured: PropTypes.bool,
+  limitAmount: PropTypes.number
+}
