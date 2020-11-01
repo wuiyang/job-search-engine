@@ -29,7 +29,8 @@
     "expo-web-browser": "~8.5.0",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
-    "mobx": "^6.0.1",
+    "mobx": "^5.9.4",
+    "mobx-react": "^7.0.0",
     "mobx-state-tree": "^3.17.2",
     "moment": "^2.29.1",
     "react": "16.13.1",
@@ -41,6 +42,7 @@
     "react-native-paper": "^4.2.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
+    "react-native-sticky-parallax-header": "^0.4.0",
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {
