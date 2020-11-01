@@ -1,14 +1,14 @@
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import { ColorSchemeName } from 'react-native';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
-import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
-import JobPostingScreen from 'screens/JobPostingScreen';
+import JobDescriptionScreen from 'screens/JobDescriptionScreen';
 import SearchScreen from 'screens/SearchScreen';
+import Colors from 'constants/Colors';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -27,11 +27,17 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const screenOptions: StackNavigationOptions = {
+    headerTitleAlign: 'center',
+    headerStyle: { 
+      backgroundColor: Colors.header.background
+    },
+    headerTintColor: Colors.header.text
+  };
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
-      <Stack.Screen name="JobPosting" component={JobPostingScreen} />
-      <Stack.Screen name="Search" component={SearchScreen} />
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="Search" component={SearchScreen} options={{ title: 'Search Jobs' }} />
+      <Stack.Screen name="JobDescription" component={JobDescriptionScreen} options={{ title: 'Job Description' }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );

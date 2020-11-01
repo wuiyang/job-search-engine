@@ -2,12 +2,6 @@ import React from 'react';
 import { View, Text, StyleProp, ViewStyle, TextStyle, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
-export type SimpleChipProps = {
-  chipStyle?: StyleProp<ViewStyle> | StyleProp<TextStyle>[],
-  textStyle?: StyleProp<TextStyle> | StyleProp<TextStyle>[],
-  children: React.ReactNode
-};
-
 const styles = StyleSheet.create({
   chipText: {
     borderWidth: 2,
@@ -19,6 +13,12 @@ const styles = StyleSheet.create({
     borderColor: '#aaa',
   }
 });
+
+export type SimpleChipProps = {
+  chipStyle?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[],
+  textStyle?: StyleProp<TextStyle> | StyleProp<TextStyle>[],
+  children: React.ReactNode
+};
 
 export default function SimpleChip(props: SimpleChipProps) {
   const { chipStyle, textStyle, children } = props;

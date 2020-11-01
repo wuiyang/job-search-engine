@@ -1,6 +1,5 @@
 export type RootStackParamList = {
-  Root: undefined;
-  JobPosting: {
+  JobDescription: {
     companySlug: string,
     jobSlug: string,
   };

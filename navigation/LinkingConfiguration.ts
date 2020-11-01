@@ -5,7 +5,7 @@ export default {
   config: {
     screens: {
       Search: '',
-      JobPosting: 'job/:companySlug/:jobSlug',
+      JobDescription: 'job/:companySlug/:jobSlug',
       Root: {
         screens: {
           TabOne: {

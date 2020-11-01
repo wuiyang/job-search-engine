@@ -13,6 +13,10 @@ export default {
     text: '#0055ff',
     background: '#f0f5ff',
   },
+  header: {
+    text: '#fff',
+    background: '#2196f3',
+  },
   dark: {
     text: '#fff',
     background: '#000',
