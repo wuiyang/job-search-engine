@@ -5,21 +5,8 @@ export default {
   config: {
     screens: {
       Search: '',
+      Filter: 'filter',
       JobDescription: 'job/:companySlug/:jobSlug',
-      Root: {
-        screens: {
-          TabOne: {
-            screens: {
-              TabOneScreen: 'one',
-            },
-          },
-          TabTwo: {
-            screens: {
-              TabTwoScreen: 'two',
-            },
-          },
-        },
-      },
       NotFound: '*',
     },
   },

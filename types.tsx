@@ -1,21 +1,20 @@
+import { Instance } from "mobx-state-tree";
+import { IdQueryInput, JobQueryBuilder } from "queries/JobQueryBuilder";
+
+export type JobDescriptionParam = {
+  companySlug: string,
+  jobSlug: string,
+  selectedTags: Instance<typeof IdQueryInput> | null
+};
+
+export type FilterParam = {
+  filterOptions: Instance<typeof JobQueryBuilder>,
+  setFilterOptions: React.Dispatch<React.SetStateAction<Instance<typeof JobQueryBuilder>>>
+};
+
 export type RootStackParamList = {
-  JobDescription: {
-    companySlug: string,
-    jobSlug: string,
-  };
   Search: undefined;
+  Filter: FilterParam;
+  JobDescription: JobDescriptionParam;
   NotFound: undefined;
-};
-
-export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
-};
-
-export type TabOneParamList = {
-  TabOneScreen: undefined;
-};
-
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
 };
