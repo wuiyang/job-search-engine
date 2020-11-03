@@ -11,8 +11,8 @@ import CompanyLogo from 'components/Job/CompanyLogo';
 import LocationText from 'components/Job/LocationText';
 import Colors from 'constants/Colors';
 import JobTags from './JobTags';
-
-const JOB_INFO_MAX_WIDTH = 1000;
+import Layout from 'constants/Layout';
+import { IdQueryInput } from 'queries/JobQueryBuilder';
 
 const styles = StyleSheet.create({
   jobView: {
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     width: '100%',
-    maxWidth: JOB_INFO_MAX_WIDTH,
+    maxWidth: Layout.infoMaxWidth,
     margin: 'auto',
   },
   jobInfo: {
@@ -49,16 +49,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
+  companyText: {
+    fontSize: 18
+  },
   normalText: {
-    fontSize: 15,
-    marginTop: 5
+    fontSize: 15
   },
   timeAgoText: {
     color: '#666',
     fontSize: 12,
   },
   featuredChip: {
-    maxWidth: JOB_INFO_MAX_WIDTH,
+    maxWidth: Layout.infoMaxWidth,
     width: '100%',
     marginHorizontal: 'auto',
   },
@@ -77,6 +79,7 @@ export type JobViewProps = {
   showTags?: boolean,
   style?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[],
   innerStyle?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[],
+  selectedTags?: Instance<typeof IdQueryInput> | null
 };
 
 export default function JobView(props: JobViewProps) {
@@ -94,6 +97,7 @@ export default function JobView(props: JobViewProps) {
     },
     onPress,
     showTags = false,
+    selectedTags,
     style,
     innerStyle
   } = props;
@@ -108,11 +112,11 @@ export default function JobView(props: JobViewProps) {
         <View style={styles.jobInfo}>
           <View style={styles.jobTextContainer}>
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.normalText}>{companyName}</Text>
+            <Text style={styles.companyText}>{companyName}</Text>
             <LocationText cities={cities} remotes={remotes} textStyle={styles.normalText} />
             <Text style={styles.timeAgoText}>Posted {moment(postedAt).fromNow()}</Text>
           </View>
-          {showTags && <JobTags tags={tags} limitAmount={3} isFeatured={isFeatured} />}
+          {showTags && <JobTags selectedTags={selectedTags} tags={tags} limitAmount={3} isFeatured={isFeatured} />}
         </View>
       </View>
     </Pressable>

@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
     borderColor: '#aaa',
+    textAlignVertical: 'center'
   }
 });
 
