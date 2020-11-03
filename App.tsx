@@ -2,7 +2,7 @@ import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import QueryLoadingWrapper from 'components/QueryLoadingWrapper';
 import GraphQL from 'constants/GraphQL';
 import { StatusBar } from 'expo-status-bar';
-import { ApplicationContextProvider, toApplicationStore } from 'models/Job';
+import { ApplicationContextProvider, toApplicationStore } from 'models/JobStore';
 import { getJobListJobs, JOB_LIST } from 'queries/JobQuery';
 import React from 'react';
 import { ApolloProvider, useQuery } from 'react-apollo';

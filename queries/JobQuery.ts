@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import { Instance } from 'mobx-state-tree';
-import { Job, JobStore } from 'models/Job';
+import { Job } from 'models/Job';
+import { JobStore } from 'models/JobStore';
 
 const JOB_TYPE = `
     id

@@ -1,6 +1,5 @@
-import { IAnyType, Instance, types } from 'mobx-state-tree';
+import { Instance, types } from 'mobx-state-tree';
 import { City, Commitment, Company, Job, Remote, Tag } from 'models/Job';
-import { JobDescriptionParam } from 'types';
 
 export const IdQueryInput = types.model('IdQueryInput', {
   id_in: types.array(types.string)  
@@ -127,6 +126,11 @@ export const JobQueryBuilder = types.model({
   },
   setTagsQuery(tagsQuery: Instance<typeof IdQueryInput>) {
     self.setArray('tags_some', tagsQuery);
+  }
+})).actions((self) => ({
+  copy(val: Instance<typeof self>) {
+    self.orderBy = val.orderBy;
+    self.setTagsQuery(IdQueryInput.create({ id_in: [...val.where.tags_some?.id_in ?? []] }));
   }
 }));
 

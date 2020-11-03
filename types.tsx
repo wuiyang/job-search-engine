@@ -4,7 +4,6 @@ import { IdQueryInput, JobQueryBuilder } from "queries/JobQueryBuilder";
 export type JobDescriptionParam = {
   companySlug: string,
   jobSlug: string,
-  selectedTags: Instance<typeof IdQueryInput> | null
 };
 
 export type FilterParam = {

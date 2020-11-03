@@ -11,7 +11,8 @@ import FormattedScreen from 'components/FormattedScreen';
 import Colors from 'constants/Colors';
 import JobTags from 'components/Job/JobTags';
 import CompanyDetail from 'components/CompanyDetail';
-import { Job, JobStore, useAppJobsStore } from 'models/Job';
+import { Job } from 'models/Job';
+import { JobStore, useAppJobsStore, useJobQueryStore } from 'models/JobStore';
 import { Instance } from 'mobx-state-tree';
 import { jobQueryFinder } from 'queries/JobQueryBuilder';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -56,9 +57,10 @@ const styles = StyleSheet.create({
 });
 
 export default function JobDescriptionScreen(props: StackScreenProps<RootStackParamList, 'JobDescription'>) {
-  const { navigation, route: { params: { companySlug, jobSlug, selectedTags } } } = props;
+  const { navigation, route: { params: { companySlug, jobSlug } } } = props;
   const jobStore: Instance<typeof JobStore> = useAppJobsStore() ?? JobStore.create();
   const job: Instance<typeof Job> | undefined = jobStore.jobs.find(jobQueryFinder(companySlug, jobSlug));
+  const selectedTags = useJobQueryStore()?.where.tags_some;
   
   if (job === undefined) {
     return (

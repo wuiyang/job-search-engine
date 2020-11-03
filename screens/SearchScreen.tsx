@@ -9,6 +9,8 @@ import { RootStackParamList } from '../types';
 import Colors from 'constants/Colors';
 import { JobQueryBuilder } from 'queries/JobQueryBuilder';
 import { IconButton, Searchbar } from 'react-native-paper';
+import { useJobQueryStore } from 'models/JobStore';
+import { Instance } from 'mobx-state-tree';
 
 const styles = StyleSheet.create({
   subheader: {
@@ -41,6 +43,8 @@ export default function SearchScreen(props: StackScreenProps<RootStackParamList,
   const [filterOptions, setFilterOptions] = React.useState(JobQueryBuilder.create());
 
   filterOptions.setJobTitle(searchbarText);
+  const query: Instance<typeof JobQueryBuilder> = useJobQueryStore() ?? JobQueryBuilder.create();
+  query.copy(filterOptions);
   
   return (
     <FormattedScreen>
@@ -61,7 +65,6 @@ export default function SearchScreen(props: StackScreenProps<RootStackParamList,
           (job) => navigation.navigate('JobDescription', {
             companySlug: job.company.slug,
             jobSlug: job.slug,
-            selectedTags: filterOptions.where.tags_some
           })
         }
         variables={filterOptions}
