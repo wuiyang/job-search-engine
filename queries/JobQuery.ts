@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Instance } from 'mobx-state-tree';
-import { City, Commitment, Company, Country, Job, JobStore, Remote, Tag } from 'models/Job';
+import { Job, JobStore } from 'models/Job';
 
 const JOB_TYPE = `
     id
@@ -75,29 +75,6 @@ query JobList {
 }
 `
 
-export const JOB_QUERY = gql`
-query JobQuery (
-  $where: JobWhereInput
-  $orderBy: JobOrderByInput
-  $skip: Int    # same as OFFSET for SQL
-  $first: Int   # same as LIMIT for SQL
-) {
-  # there is no direct query to jobs which provides where query
-  # hence search through commitments
-  # commitments can be replaced with other non-null properties
-  commitments {
-    jobs (
-      where: $where
-      orderBy: $orderBy
-      skip: $skip
-      first: $first
-    ) {
-      ${JOB_TYPE}
-    }
-  }
-}
-`
-
 function toJobInstance(jobData: any): Instance<typeof Job> {
   const { postedAt, createdAt, updatedAt, ...otherProperty } = jobData;
   return Job.create({
@@ -107,6 +84,7 @@ function toJobInstance(jobData: any): Instance<typeof Job> {
     updatedAt: new Date(updatedAt),
   });
 }
+
 function toJobStore(jobsData: any[]): Instance<typeof JobStore> {
   const jobs = JobStore.create();
   jobsData.forEach(job => {
@@ -116,15 +94,6 @@ function toJobStore(jobsData: any[]): Instance<typeof JobStore> {
   return jobs;
 }
 
-export function getJob(data: any): Instance<typeof Job> {
-  return toJobInstance(data.job);
-}
-
 export function getJobListJobs(data: any): Instance<typeof JobStore> {
   return toJobStore(data.jobs);
 }
-
-export function getJobQueryJobs(data: any): Instance<typeof JobStore> {
-  return toJobStore(data.commitments.jobs);
-}
-
