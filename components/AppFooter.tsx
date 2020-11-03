@@ -3,8 +3,6 @@ import { View, Text, StyleSheet, Linking } from 'react-native';
 
 const styles = StyleSheet.create({
   footer: {
-    flex: 1,
-    justifyContent: 'flex-end',
     backgroundColor: '#333',
     alignItems: 'center',
     paddingVertical: 5,
