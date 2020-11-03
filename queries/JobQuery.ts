@@ -91,7 +91,6 @@ function toJobStore(jobsData: any[]): Instance<typeof JobStore> {
   jobsData.forEach(job => {
     jobs.push(toJobInstance(job));
   });
-  console.log(jobs);
   return jobs;
 }
 
