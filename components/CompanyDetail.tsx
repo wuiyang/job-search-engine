@@ -29,7 +29,7 @@ export default function CompanyDetail(props: CompanyDetailProps) {
     <View>
       <Text style={styles.descriptionHeader}>Company</Text>
       <Text style={styles.normalText}>{company.name}</Text>
-      <LinkText linkPrepend="https://www.twitter.com/" link={company.twitter}>
+      <LinkText linkPrepend="https://twitter.com/" link={company.twitter}>
         Company's Twitter
       </LinkText>
       <LinkText link={company.websiteUrl}>
@@ -54,7 +54,7 @@ function LinkText(props: LinkTextProps) {
     return null;
   }
 
-  if (linkPrepend) {
+  if (linkPrepend && !finalLink.includes(linkPrepend)) {
     finalLink = linkPrepend + finalLink;
   }
 
