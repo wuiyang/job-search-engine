@@ -23,3 +23,23 @@ To run: ``expo start``
 To publish: ``expo publish``
 
 # Preview
+
+## Search Page
+
+![Search Page](screenshots/main.png)
+
+## Filter Page
+
+Filter Options|Search Tags
+:-:|:-:
+![Filter Page](screenshots/filter.png) | ![Searching Tags](screenshots/filter_search.png)
+
+## Filtered Search Result
+![Tag Search Result](screenshots/search_result.png)
+
+## Search Job Title
+
+![Searching Job Title](screenshots/title_search.png)
+
+## Job Description Page
+![Job Description Page](screenshots/job_description.png)
