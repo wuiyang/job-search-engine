@@ -17,44 +17,8 @@ import { Instance } from 'mobx-state-tree';
 import { jobQueryFinder } from 'queries/JobQueryBuilder';
 import { MaterialIcons } from '@expo/vector-icons';
 import Layout from 'constants/Layout';
+import { baseStyles, JobDescriptionStyles, SharedStyles } from 'constants/Styles';
 
-const styles = StyleSheet.create({
-  centerContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  jobContainer: {
-    flexDirection: 'column',
-    overflow: 'scroll',
-    alignItems: 'center',
-  },
-  topBackground: {
-    backgroundColor: '#f2f2f2',
-  },
-  jobInfoHeader: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    width: 'auto',
-  },
-  description: {
-    flex: 1,
-    width: '100%',
-    maxWidth: Layout.infoMaxWidth,
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    margin: 'auto'
-  },
-  descriptionHeader: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    marginTop: 15,
-  },
-  normalText: {
-    fontSize: 15,
-    marginTop: 5
-  },
-});
 
 export default function JobDescriptionScreen(props: StackScreenProps<RootStackParamList, 'JobDescription'>) {
   const { navigation, route: { params: { companySlug, jobSlug } } } = props;
@@ -64,7 +28,7 @@ export default function JobDescriptionScreen(props: StackScreenProps<RootStackPa
   
   if (job === undefined) {
     return (
-      <Pressable style={styles.centerContainer} onPress={() => navigation.goBack()}>
+      <Pressable style={baseStyles.flexCenter} onPress={() => navigation.goBack()}>
         <MaterialIcons name="error" size={50} color="black" />
         <Text>Error! Unable to find job!</Text>
         <Text>Press anywhere to navigate back to search</Text>
@@ -74,18 +38,18 @@ export default function JobDescriptionScreen(props: StackScreenProps<RootStackPa
 
   return (
     <FormattedScreen>
-      <View style={styles.jobContainer}>
-        <JobView job={job} style={styles.topBackground} innerStyle={styles.jobInfoHeader} />
+      <View style={JobDescriptionStyles.jobContainer}>
+        <JobView job={job} style={JobDescriptionStyles.topBackground} innerStyle={JobDescriptionStyles.jobInfoHeader} />
       </View>
-      <ScrollView style={styles.description}>
+      <ScrollView style={SharedStyles.maintainInfoWidth}>
         <CompanyDetail company={job.company} />
-        <Text style={styles.descriptionHeader}>Commitment</Text>
-        <Text style={styles.normalText}>{job.commitment.title}</Text>
-        <Text style={styles.descriptionHeader}>Posted</Text>
-        <Text style={styles.normalText}>{job.postedAt.toDateString()}</Text>
-        <Text style={styles.descriptionHeader}>Job Tags</Text>
+        <Text style={SharedStyles.textLargeMargin}>Commitment</Text>
+        <Text style={SharedStyles.textNormalMargin}>{job.commitment.title}</Text>
+        <Text style={SharedStyles.textLargeMargin}>Posted</Text>
+        <Text style={SharedStyles.textNormalMargin}>{job.postedAt.toDateString()}</Text>
+        <Text style={SharedStyles.textLargeMargin}>Job Tags</Text>
         <JobTags tags={job.tags} selectedTags={selectedTags} />
-        <Text style={styles.descriptionHeader}>Description</Text>
+        <Text style={SharedStyles.textLargeMargin}>Description</Text>
         <Markdown>{job.description}</Markdown>
       </ScrollView>
       <ApplyButton applyUrl={job.applyUrl} />

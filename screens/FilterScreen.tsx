@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { Button, Chip, Searchbar } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -11,39 +11,7 @@ import { Tag } from 'models/Job';
 import { useAppQueryFilterStore } from 'models/JobStore';
 import { getSnapshot, Instance } from 'mobx-state-tree';
 import { IdQueryInput, JobQueryBuilder } from 'queries/JobQueryBuilder';
-import Layout from 'constants/Layout';
-
-const styles = StyleSheet.create({
-  maintainWidth: {
-    flex: 1,
-    width: '100%',
-    maxWidth: Layout.infoMaxWidth,
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    margin: 'auto'
-  },
-  filterContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-  },
-  chipSpacing: {
-    marginHorizontal: 10,
-    marginVertical: 5,
-  },
-  header: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    marginTop: 15,
-  },
-  normalText: {
-    fontSize: 15,
-    marginTop: 5
-  },
-  searchbar: {
-    marginVertical: 5
-  }
-});
+import { baseStyles, SharedStyles, FilterScreenStyles } from 'constants/Styles';
 
 export default function FilterScreen(props: StackScreenProps<RootStackParamList, 'Filter'>) {
   const { navigation, route: { params: { filterOptions, setFilterOptions } } } = props;
@@ -71,15 +39,15 @@ export default function FilterScreen(props: StackScreenProps<RootStackParamList,
 
   return (
     <FormattedScreen>
-      <ScrollView style={styles.maintainWidth}>
-        <Text style={styles.header}>Filter by tags</Text>
+      <ScrollView style={SharedStyles.maintainInfoWidth}>
+        <Text style={SharedStyles.textHeaderMargin}>Filter by tags</Text>
         <Searchbar
           placeholder="Search tags"
           onChangeText={setSearchbarText}
           value={searchbarText}
-          style={styles.searchbar}
+          style={baseStyles.marginVerticalSmall}
         />
-        <View style={styles.filterContainer}>
+        <View style={FilterScreenStyles.filterContainer}>
           {
             tags.filter(tag => tag.name.toUpperCase().includes(searchKeyword)).map(tag => (
               <Chip
@@ -87,7 +55,7 @@ export default function FilterScreen(props: StackScreenProps<RootStackParamList,
                 key={tag.id}
                 selected={tagFilter.has(tag.id)}
                 onPress={() => tagPressed(tag)}
-                style={styles.chipSpacing}
+                style={SharedStyles.tagChipSpacing}
               >
                 {tag.name}
               </Chip>
@@ -99,7 +67,7 @@ export default function FilterScreen(props: StackScreenProps<RootStackParamList,
         onPress={updateFilter}
         mode="contained"
         color={Colors.header.background}
-        labelStyle={{ fontSize: 20 }}
+        labelStyle={SharedStyles.textLargeMargin}
       >
         Apply Filter
       </Button>

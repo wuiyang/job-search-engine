@@ -1,34 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import SimpleChip from 'components/SimpleChip';
 import { Tag } from 'models/Job';
-import Colors from 'constants/Colors';
 import { Instance } from 'mobx-state-tree';
 import { IdQueryInput } from 'queries/JobQueryBuilder';
-
-const styles = StyleSheet.create({
-  tagChipContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    minWidth: 150,
-    marginVertical: 5,
-  },
-  tagChip: {
-    marginRight: 10,
-    marginVertical: 5
-  },
-  selectedChip: {
-    backgroundColor: Colors.featured.text,
-    borderColor: Colors.featured.text,
-    color: '#fff',
-  },
-  featuredText: {
-    borderColor: Colors.featured.text,
-    color: Colors.featured.text,
-  },
-});
+import { JobTagsStyles, SharedStyles } from 'constants/Styles';
 
 export type JobTagsProps = {
   selectedTags?: Instance<typeof IdQueryInput> | null,
@@ -55,12 +32,12 @@ export default function JobTags(props: JobTagsProps) {
   }
 
   return (
-    <View style={styles.tagChipContainer}>
+    <View style={JobTagsStyles.tagChipContainer}>
     {
       shinyTags.map(tag => (
         <SimpleChip
-          chipStyle={styles.tagChip}
-          textStyle={[isFeatured ? styles.featuredText : null, styles.selectedChip]}
+          chipStyle={SharedStyles.tagChipSpacing}
+          textStyle={[isFeatured ? JobTagsStyles.featuredText : null, JobTagsStyles.selectedChip]}
           key={tag.id}
         >
           {tag.name}
@@ -70,8 +47,8 @@ export default function JobTags(props: JobTagsProps) {
     {
       normalTags.map(tag => (
         <SimpleChip
-          chipStyle={styles.tagChip}
-          textStyle={isFeatured ? styles.featuredText : null}
+          chipStyle={SharedStyles.tagChipSpacing}
+          textStyle={isFeatured ? JobTagsStyles.featuredText : null}
           key={tag.id}
         >
           {tag.name}

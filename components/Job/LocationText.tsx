@@ -1,24 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, StyleProp , TextStyle } from 'react-native';
+import { Text, View, StyleProp , TextStyle } from 'react-native';
 import PropTypes from 'prop-types';
 import { City, Remote } from 'models/Job';
 import { Instance } from 'mobx-state-tree';
-
-const styles = StyleSheet.create({
-  locationTextContainer: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  normalText: {
-    fontSize: 15,
-    marginTop: 5
-  },
-});
+import { baseStyles, SharedStyles } from 'constants/Styles';
 
 export type LocationTextProps = {
   cities: Instance<typeof City>[],
   remotes: Instance<typeof Remote>[],
-  textStyle?: StyleProp<TextStyle> | StyleProp<TextStyle>[]
+  textStyle?: StyleProp<TextStyle>
 };
 
 export default function LocationText(props: LocationTextProps) {
@@ -30,7 +20,7 @@ export default function LocationText(props: LocationTextProps) {
   // get country emoji
   const countryEmoji = cities.length > 0 ? cities[0].country.countryEmoji : '';
 
-  const usedTextStyle = textStyle ?? styles.normalText;
+  const usedTextStyle = textStyle ?? SharedStyles.textNormalMargin;
 
   // Text element
   let citiesText = null, spacingText = null, remotesText = null;
@@ -49,7 +39,7 @@ export default function LocationText(props: LocationTextProps) {
   }
 
   return (
-    <View style={styles.locationTextContainer}>
+    <View style={baseStyles.flexRowWrap}>
       {citiesText}{spacingText}{remotesText}
     </View>
   );

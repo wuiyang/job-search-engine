@@ -9,5 +9,4 @@ export default {
     height,
   },
   isSmallDevice: width < 375,
-  infoMaxWidth: 1000,
 };

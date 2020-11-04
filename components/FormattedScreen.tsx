@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, Linking } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { StyleProp } from 'react-native';
 import { ViewStyle } from 'react-native';
+import Colors from 'constants/Colors';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.light.background,
     flex: 1,
   }
 });
+
 export type FormattedScreenProps = {
-  style?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[],
+  style?: StyleProp<ViewStyle>,
   children: React.ReactNode
 };
 

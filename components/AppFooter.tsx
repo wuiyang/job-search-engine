@@ -1,36 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, Linking } from 'react-native';
-
-const styles = StyleSheet.create({
-  footer: {
-    backgroundColor: '#333',
-    alignItems: 'center',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-  },
-  footerText: {
-    marginVertical: 5,
-    fontSize: 15,
-    color: '#e5e5e5',
-  },
-  link: {
-    color: '#7BBAFF'
-  }
-});
+import { View, Text, Linking } from 'react-native';
+import { AppFooterStyles } from 'constants/Styles';
 
 export default function AppFooter() {
   return (
-    <View style={styles.footer}>
-      <Text style={styles.footerText}>Author: Tan Wui Yang</Text>
-      <Text style={styles.footerText}>Made with React Native.</Text>
-      <Text style={styles.footerText}>Demostrating GraphQL API.</Text>
-      <Text style={styles.footerText}>
+    <View style={AppFooterStyles.footer}>
+      <Text style={AppFooterStyles.footerText}>Author: Tan Wui Yang</Text>
+      <Text style={AppFooterStyles.footerText}>Made with React Native.</Text>
+      <Text style={AppFooterStyles.footerText}>Demostrating GraphQL API.</Text>
+      <Text style={AppFooterStyles.footerText}>
         GraphQL server:
-        <Text style={[styles.footerText, styles.link]} onPress={() => Linking.openURL("https://graphql.jobs/")}>
+        <Text style={AppFooterStyles.footerLink} onPress={() => Linking.openURL("https://graphql.jobs/")}>
           https://graphql.jobs/
         </Text>
       </Text>
-      <Text style={[styles.footerText, styles.link]} onPress={() => Linking.openURL("https://clearbit.com/")}>
+      <Text style={AppFooterStyles.footerLink} onPress={() => Linking.openURL("https://clearbit.com/")}>
         Logos provided by Clearbit.
       </Text>
     </View>

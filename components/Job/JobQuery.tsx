@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { FlatList } from 'react-native-gesture-handler';
 import { Job } from 'models/Job';
@@ -8,14 +7,7 @@ import JobView from './JobView';
 import { Instance } from 'mobx-state-tree';
 import AppFooter from 'components/AppFooter';
 import { JobQueryBuilder, jobsQueryFilter } from 'queries/JobQueryBuilder';
-
-const styles = StyleSheet.create({
-  centerContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import { baseStyles } from 'constants/Styles';
 
 export type JobQueryProps = {
   variables?: Instance<typeof JobQueryBuilder>,
@@ -36,8 +28,8 @@ export default function JobQuery(props: JobQueryProps) {
         )
       }
       keyExtractor={ (item) => item.id }
-      contentContainerStyle={{flexGrow: 1}}
-      ListFooterComponentStyle={{flex: 1, justifyContent: 'flex-end'}}
+      contentContainerStyle={baseStyles.flexGrow}
+      ListFooterComponentStyle={baseStyles.flexJustifyEnd}
       ListFooterComponent={AppFooter}
     />
   );

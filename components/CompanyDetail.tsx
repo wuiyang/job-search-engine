@@ -1,34 +1,20 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Linking } from 'react-native';
+import { View, Text, Linking } from 'react-native';
 
 import { Company } from 'models/Job';
 import { Instance } from 'mobx-state-tree';
-
-const styles = StyleSheet.create({
-  descriptionHeader: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    marginTop: 15,
-  },
-  normalText: {
-    fontSize: 15,
-    marginTop: 5
-  },
-  link: {
-    color: '#007bff'
-  }
-});
+import { SharedStyles } from 'constants/Styles';
 
 export type CompanyDetailProps = {
   company: Instance<typeof Company>
-}
+};
 
 export default function CompanyDetail(props: CompanyDetailProps) {
   const { company } = props;
   return (
     <View>
-      <Text style={styles.descriptionHeader}>Company</Text>
-      <Text style={styles.normalText}>{company.name}</Text>
+      <Text style={SharedStyles.textHeaderMargin}>Company</Text>
+      <Text style={SharedStyles.textLargeMargin}>{company.name}</Text>
       <LinkText linkPrepend="https://twitter.com/" link={company.twitter}>
         Company's Twitter
       </LinkText>
@@ -43,7 +29,7 @@ type LinkTextProps = {
   linkPrepend?: string,
   link?: string | null,
   children: React.ReactNode,
-}
+};
 
 function LinkText(props: LinkTextProps) {
   const { linkPrepend, link, children } = props;
@@ -59,7 +45,7 @@ function LinkText(props: LinkTextProps) {
   }
 
   return (
-    <Text style={[styles.normalText, styles.link]} onPress={() => Linking.openURL(finalLink)}>
+    <Text style={SharedStyles.linkText} onPress={() => Linking.openURL(finalLink)}>
       {children}
     </Text>
   );

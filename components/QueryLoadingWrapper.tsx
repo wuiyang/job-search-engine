@@ -1,16 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, Pressable } from 'react-native';
+import { Text, View, ActivityIndicator, Pressable } from 'react-native';
 import PropTypes from 'prop-types';
 import { QueryResult } from 'react-apollo';
 import { MaterialIcons } from '@expo/vector-icons';
-
-const styles = StyleSheet.create({
-  centerContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import { baseStyles } from 'constants/Styles';
 
 export type QueryLoadingWrapperProps = {
   loadingText?: string,
@@ -30,7 +23,7 @@ export default function QueryLoadingWrapper(props: QueryLoadingWrapperProps) {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
+      <View style={baseStyles.flexCenter}>
         <ActivityIndicator size="large" />
         <Text>{loadingText}</Text>
       </View>
@@ -39,7 +32,7 @@ export default function QueryLoadingWrapper(props: QueryLoadingWrapperProps) {
 
   if (error) {
     return (
-      <Pressable style={styles.centerContainer} onPress={() => refetch()}>
+      <Pressable style={baseStyles.flexCenter} onPress={() => refetch()}>
         <MaterialIcons name="error" size={50} color="black" />
         <Text>{errorText}</Text>
         <Text>Press anywhere to refresh</Text>
