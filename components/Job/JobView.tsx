@@ -86,10 +86,7 @@ export default function JobView(props: JobViewProps) {
   const {
     job: {
       title,
-      company: {
-        name: companyName,
-        logoUrl
-      },
+      company,
       cities,
       remotes,
       tags,
@@ -108,11 +105,11 @@ export default function JobView(props: JobViewProps) {
     <Pressable style={[styles.jobView, style, isFeatured ? styles.featured : null]} onPress={onPress}>
       {getFeatureTag(isFeatured, innerStyle)}
       <View style={[styles.jobContentWrapper, innerStyle]}>
-        <CompanyLogo companyName={companyName} logoUrl={logoUrl} />
+        <CompanyLogo company={company} />
         <View style={styles.jobInfo}>
           <View style={styles.jobTextContainer}>
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.companyText}>{companyName}</Text>
+            <Text style={styles.companyText}>{company.name}</Text>
             <LocationText cities={cities} remotes={remotes} textStyle={styles.normalText} />
             <Text style={styles.timeAgoText}>Posted {moment(postedAt).fromNow()}</Text>
           </View>

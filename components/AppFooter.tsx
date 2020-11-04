@@ -30,6 +30,9 @@ export default function AppFooter() {
           https://graphql.jobs/
         </Text>
       </Text>
+      <Text style={[styles.footerText, styles.link]} onPress={() => Linking.openURL("https://clearbit.com/")}>
+        Logos provided by Clearbit.
+      </Text>
     </View>
   );
 }
