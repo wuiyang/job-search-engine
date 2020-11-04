@@ -26,20 +26,20 @@ To publish: ``expo publish``
 
 ## Search Page
 
-![Search Page](screenshots/main.png)
+![Search Page](screenshots/main.png?raw=true)
 
 ## Filter Page
 
 Filter Options|Search Tags
 :-:|:-:
-![Filter Page](screenshots/filter.png) | ![Searching Tags](screenshots/filter_search.png)
+![Filter Page](screenshots/filter.png?raw=true) | ![Searching Tags](screenshots/filter_search.png?raw=true)
 
 ## Filtered Search Result
-![Tag Search Result](screenshots/search_result.png)
+![Tag Search Result](screenshots/search_result.png?raw=true)
 
 ## Search Job Title
 
-![Searching Job Title](screenshots/title_search.png)
+![Searching Job Title](screenshots/title_search.png?raw=true)
 
 ## Job Description Page
-![Job Description Page](screenshots/job_description.png)
+![Job Description Page](screenshots/job_description.png?raw=true)
